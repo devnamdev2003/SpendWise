@@ -8,6 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="./js/index.js" defer></script>
+  <script src="./js/listSection.js" defer></script>
+  <script src="./js/homeSection.js" defer></script>
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/color.css">
 </head>
@@ -69,14 +71,41 @@
     <!-- Main Content -->
     <main class="flex-1 p-6 overflow-y-auto w-full h-full">
       <!-- Home Section -->
-      <section id="home" class="section">
-        <div class="bg-surface p-4 rounded shadow">
-          <h2 class="text-lg font-semibold mb-2">💹 Monthly Overview</h2>
-          <div class="w-full max-w-sm mx-auto overflow-x-auto">
-            <canvas id="expenseChart" class="w-full h-auto"></canvas>
+      <section id="home" class="section grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Daily Spending -->
+        <div class="bg-surface p-4 rounded shadow flex justify-center">
+          <div class="w-full max-w-xl">
+            <h2 class="text-lg font-semibold mb-2">📅 Daily Spending</h2>
+            <canvas id="dailyChart" class="w-full h-auto"></canvas>
+          </div>
+        </div>
+        <!-- Top Expenses -->
+        <div class="bg-surface p-4 rounded shadow flex justify-center">
+          <div class="w-full max-w-xl">
+            <h2 class="text-lg font-semibold mb-2">🔥 Top Expenses</h2>
+            <canvas id="topExpensesChart" class="w-full h-auto"></canvas>
+          </div>
+        </div>
+        <div class="bg-surface p-4 rounded shadow flex flex-col">
+          <h2 class="text-lg font-semibold mb-2 text-left">💹 Category Overview</h2>
+          <div class="w-full flex justify-center">
+            <div class="w-full max-w-sm">
+              <canvas id="categoryChart" class="w-full h-auto"></canvas>
+            </div>
+          </div>
+        </div>
+        <!-- Payment Mode -->
+        <div class="bg-surface p-4 rounded shadow flex justify-center flex-col">
+          <h2 class="text-lg font-semibold mb-2 text-left">💳 Payment Mode</h2>
+          <div class="w-full flex justify-center">
+            <div class="w-full max-w-sm">
+              <canvas id="paymentChart" class="w-full h-auto"></canvas>
+            </div>
           </div>
         </div>
       </section>
+
+
 
       <!-- Add Section -->
       <section id="add" class="section hidden">
