@@ -1,0 +1,128 @@
+[
+    {
+        "category_id": 1,
+        "name": "Food & Drinks",
+        "icon": "🍔",
+        "color": "#f94144"
+    },
+    {
+        "category_id": 2,
+        "name": "Groceries",
+        "icon": "🥦",
+        "color": "#f3722c"
+    },
+    {
+        "category_id": 3,
+        "name": "Transportation",
+        "icon": "🚗",
+        "color": "#f8961e"
+    },
+    {
+        "category_id": 4,
+        "name": "Shopping",
+        "icon": "🛍️",
+        "color": "#f9844a"
+    },
+    {
+        "category_id": 5,
+        "name": "Bills & Utilities",
+        "icon": "💡",
+        "color": "#f9c74f"
+    },
+    {
+        "category_id": 6,
+        "name": "Entertainment",
+        "icon": "🎬",
+        "color": "#90be6d"
+    },
+    {
+        "category_id": 7,
+        "name": "Health",
+        "icon": "💊",
+        "color": "#43aa8b"
+    },
+    {
+        "category_id": 8,
+        "name": "Education",
+        "icon": "🎓",
+        "color": "#577590"
+    },
+    {
+        "category_id": 9,
+        "name": "Subscriptions",
+        "icon": "📺",
+        "color": "#277da1"
+    },
+    {
+        "category_id": 10,
+        "name": "Travel",
+        "icon": "✈️",
+        "color": "#8e44ad"
+    },
+    {
+        "category_id": 11,
+        "name": "Rent",
+        "icon": "🏠",
+        "color": "#34495e"
+    },
+    {
+        "category_id": 12,
+        "name": "Investments",
+        "icon": "📈",
+        "color": "#2ecc71"
+    },
+    {
+        "category_id": 13,
+        "name": "Donations",
+        "icon": "❤️",
+        "color": "#e74c3c"
+    },
+    {
+        "category_id": 14,
+        "name": "Pets",
+        "icon": "🐶",
+        "color": "#d35400"
+    },
+    {
+        "category_id": 15,
+        "name": "Family & Friends",
+        "icon": "👨‍👩‍👧‍👦",
+        "color": "#3498db"
+    },
+    {
+        "category_id": 16,
+        "name": "Loan EMI",
+        "icon": "🏦",
+        "color": "#9b59b6"
+    },
+    {
+        "category_id": 17,
+        "name": "Insurance",
+        "icon": "📄",
+        "color": "#1abc9c"
+    },
+    {
+        "category_id": 18,
+        "name": "Maintenance",
+        "icon": "🛠️",
+        "color": "#7f8c8d"
+    },
+    {
+        "category_id": 19,
+        "name": "Miscellaneous",
+        "icon": "📌",
+        "color": "#bdc3c7"
+    },
+    {
+        "category_id": 20,
+        "name": "Savings",
+        "icon": "💰",
+        "color": "#27ae60"
+    },
+    {
+        "category_id": 21,
+        "name": "Gifts",
+        "icon": "🎁",
+        "color": "#c0392b"
+    }
+]
