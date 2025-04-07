@@ -4,14 +4,14 @@
 | Column           | Type        | Description                                               |
 | ---------------- | ----------- | --------------------------------------------------------- |
 | `expense_id`     | INT (PK)    | Unique ID                                                 |
-| `amount`         | DECIMAL     | Amount spent                                              |
-| `category_id`    | INT (FK)    | Link to category                                          |
-| `subcategory`    | VARCHAR     | (Optional) More specific info, e.g., ‘Lunch’ under ‘Food’ |
-| `date`           | DATE        | Date of expense                                           |
-| `time`           | TIME        | Time of expense (optional)                                |
+| **`amount` **        | DECIMAL     | Amount spent                                              |
+| **`category_id`**    | INT (FK)    | Link to category                                          |
+| **`subcategory`**    | VARCHAR     | (Optional) More specific info, e.g., ‘Lunch’ under ‘Food’ |
+| **`date` **          | DATE        | Date of expense                                           |
+| **`time`**           | TIME        | Time of expense (optional)                                |
 | `note`           | TEXT        | Optional description or reason                            |
-| `payment_mode`   | VARCHAR     | e.g., Cash, UPI, Credit Card                              |
-| `location`       | VARCHAR     | Where the money was spent (optional)                      |
+| **`payment_mode` **  | VARCHAR     | e.g., Cash, UPI, Credit Card                              |
+| **`location` **      | VARCHAR     | Where the money was spent (optional)                      |
 | `receipt_image`  | TEXT/URL    | Link to uploaded receipt or base64 image                  |
 | `is_recurring`   | BOOLEAN     | Is this a recurring expense?                              |
 | `currency`       | VARCHAR(10) | e.g., INR, USD, EUR, etc.                                 |

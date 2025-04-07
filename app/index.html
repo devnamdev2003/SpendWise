@@ -11,6 +11,7 @@
   <script src="./js/listSection.js" defer></script>
   <script src="./js/homeSection.js" defer></script>
   <script src="./js/addSection.js" defer></script>
+  <script src="./js/searchSection.js" defer></script>
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/color.css">
   <link rel="stylesheet" href="./css/addExpense.css">
@@ -109,8 +110,6 @@
           </div>
         </div>
       </section>
-
-
 
       <!-- Add Section -->
       <section id="add" class="section hidden">
@@ -233,7 +232,7 @@
                   Date
                 </th>
                 <th class="text-left px-4 py-3 cursor-pointer" onclick="sortTable(4)">
-                  Mode
+                  Payment Mode
                 </th>
                 <th class="text-left px-4 py-3">Actions</th>
               </tr>
@@ -279,10 +278,47 @@
         </div>
       </section>
 
-      <!-- Search Section -->
+      <!-- 🔍 Search Section -->
       <section id="search" class="section hidden">
-        <h1 class="text-xl font-bold mb-4">Search</h1>
-        <p>Search functionality here...</p>
+        <h1 class="text-2xl font-bold mb-6 text-accent">🔍 Search Expenses</h1>
+
+        <form id="searchForm" class="flex flex-col md:flex-row md:items-end md:space-x-4 space-y-4 md:space-y-0 mb-4">
+          <div class="flex flex-col">
+            <label for="fromDate" class="mb-1 font-medium">From Date</label>
+            <input type="date" id="fromDate" name="from" class="p-2 rounded border"
+              style="background-color: var(--input-bg); color: var(--input-text); border-color: var(--input-border);"
+              required>
+          </div>
+          <div class="flex flex-col">
+            <label for="toDate" class="mb-1 font-medium">To Date</label>
+            <input type="date" id="toDate" name="to" class="p-2 rounded border"
+              style="background-color: var(--input-bg); color: var(--input-text); border-color: var(--input-border);"
+              required>
+          </div>
+          <button type="submit" class="bg-accent text-white px-4 py-2 rounded"
+            style="background-color: var(--color-accent);">
+            Search
+          </button>
+        </form>
+        <div class="overflow-x-auto bg-surface rounded shadow">
+          <table class="min-w-full table-auto">
+            <thead>
+              <tr class=" bg-accent text-white uppercase text-xs">
+                <th class="text-left px-4 py-3">Amount</th>
+                <th class="text-left px-4 py-3">Category</th>
+                <th class="text-left px-4 py-3">Subcategory</th>
+                <th class="text-left px-4 py-3">Date</th>
+                <th class="text-left px-4 py-3">Payment Mode</th>
+                <th class="text-left px-4 py-3">Location</th>
+                
+              </tr>
+            </thead>
+            <tbody id="searchResultsTableBody" class="text-color-text bg-color-surface dark:bg-color-surface">
+              <!-- Dynamic rows go here -->
+            </tbody>
+          </table>
+        </div>
+
       </section>
 
       <!-- Calendar Section -->

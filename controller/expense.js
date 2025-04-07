@@ -16,6 +16,21 @@ router.get('/', (req, res) => {
   });
 });
 
+// Search  expenses
+router.get('/search', (req, res) => {
+  const { from, to } = req.query;
+  const sql = `
+    SELECT * FROM expenses
+    WHERE date BETWEEN ? AND ?
+    ORDER BY date DESC
+  `;
+
+  db.query(sql, [from, to], (err, results) => {
+    if (err) return res.status(500).json({ error: err });
+    res.json(results);
+  });
+});
+
 // GET by ID expenses
 router.get('/:id', (req, res) => {
   const sql = `
@@ -81,3 +96,5 @@ router.delete('/:id', (req, res) => {
 });
 
 module.exports = router;
+
+

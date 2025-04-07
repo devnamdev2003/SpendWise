@@ -20,6 +20,9 @@ async function listSection() {
 
         expenses.forEach((expense, index) => {
             const tr = document.createElement("tr");
+            const expDate = new Date(expense.date);
+            let expDateTime = `${expDate.getFullYear()}-${String(expDate.getMonth() + 1).padStart(2, '0')}-${String(expDate.getDate()).padStart(2, '0')} ${expense.time.split(":")[0]}:${expense.time.split(":")[1]}:${expense.time.split(":")[2]}`;
+
             tr.className =
                 "border-b dark:border-gray-700 expense-list-item transition";
 
@@ -27,17 +30,17 @@ async function listSection() {
         <td class="px-4 py-3 font-semibold text-color-text whitespace-nowrap">₹${expense.amount}</td>
         <td class="px-4 py-3 whitespace-nowrap">${categoryMap[expense.category_id] || "N/A"}</td>
         <td class="px-4 py-3 whitespace-nowrap">${expense.subcategory || "-"}</td>
-        <td class="px-4 py-3 whitespace-nowrap">${expense.date}</td>
+        <td class="px-4 py-3 whitespace-nowrap">${expDateTime}</td>
         <td class="px-4 py-3 whitespace-nowrap">${expense.payment_mode}</td>
         <td class="px-4 py-3 whitespace-nowrap">
           <!--  <button 
-            onclick="openEditModal(${index})"
+            onclick="openEditModal(${expense.expense_id})"
             class="text-accent hover:underline flex items-center gap-1"
           >
             ✏️ <span>Edit</span>
           </button> -->
           <button 
-            onclick="confirmDelete(${index})"
+            onclick="confirmDelete(${expense.expense_id})"
             class="text-red-500 hover:underline flex items-center gap-1"
           >
             🗑️ <span>Delete</span>
@@ -120,9 +123,24 @@ function saveEdit(event) {
     listSection(); // refresh
 }
 
-function confirmDelete(index) {
+function confirmDelete(id) {
     if (confirm("Are you sure you want to delete this expense?")) {
-        expenses.splice(index, 1);
-        listSection();
+        fetch(`${url}expenses/${id}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to delete expense");
+                }
+                return response.json();
+            })
+            .then(data => {
+                showToast(data.message || "Expense deleted successfully", 'success');
+                listSection();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showToast(error || 'Something went wrong while deleting the expense.', 'error');
+            });
     }
 }

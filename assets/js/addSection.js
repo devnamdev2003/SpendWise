@@ -79,7 +79,7 @@ async function loadCategory() {
 
         categories.forEach(cat => {
             const li = document.createElement("li");
-            li.textContent = cat.name;
+            li.textContent = cat.name + " " + cat.icon;
             li.className = "p-2 cursor-pointer category-list-item";
             li.dataset.value = cat.category_id;
 
