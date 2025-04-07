@@ -10,20 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.documentElement.classList.toggle("dark");
   });
 
-
-  const timeInput = document.getElementById("expenseTime");
-  const now = new Date();
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-  timeInput.value = `${hours}:${minutes}`;
-
-  const dateInput = document.getElementById("expenseDate");
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  dateInput.value = `${year}-${month}-${day}`;
-
-
 });
 
 
@@ -40,6 +26,10 @@ const showSection = (id) => {
   }
   else if (id === "home") {
     loadDashboardData();
+  }
+  else if (id === "add") {
+    addFormReset();
+    loadCategory();
 
   }
   // On mobile, close the sidebar after selection
@@ -62,3 +52,27 @@ const toggleSidebar = () => {
     sidebar.classList.add("hidden");
   }
 };
+
+
+function showToast(message, type = 'success') {
+  const toastContainer = document.getElementById('toast-container');
+
+  const toast = document.createElement('div');
+  toast.className = `
+      flex items-center justify-between max-w-xs w-full p-4 rounded shadow-lg text-white
+      ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}
+      animate-fade-in
+  `;
+
+  toast.innerHTML = `
+      <span>${message}</span>
+      <button class="ml-4 text-white focus:outline-none" onclick="this.parentElement.remove()">&times;</button>
+  `;
+
+  toastContainer.appendChild(toast);
+
+  // Auto-remove after 3 seconds
+  setTimeout(() => {
+    toast.remove();
+  }, 5000);
+}

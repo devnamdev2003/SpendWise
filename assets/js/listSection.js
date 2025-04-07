@@ -3,8 +3,8 @@ let expenses = [];
 async function listSection() {
     try {
         const [expRes, catRes] = await Promise.all([
-            fetch("http://localhost:3000/expenses/"),
-            fetch("http://localhost:3000/categories/"),
+            fetch(url + "expenses/"),
+            fetch(url + "categories/"),
         ]);
 
         expenses = await expRes.json();
@@ -30,12 +30,12 @@ async function listSection() {
         <td class="px-4 py-3 whitespace-nowrap">${expense.date}</td>
         <td class="px-4 py-3 whitespace-nowrap">${expense.payment_mode}</td>
         <td class="px-4 py-3 whitespace-nowrap">
-          <button 
+          <!--  <button 
             onclick="openEditModal(${index})"
             class="text-accent hover:underline flex items-center gap-1"
           >
             ✏️ <span>Edit</span>
-          </button>
+          </button> -->
           <button 
             onclick="confirmDelete(${index})"
             class="text-red-500 hover:underline flex items-center gap-1"

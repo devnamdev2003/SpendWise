@@ -2,15 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load data initially
     loadDashboardData();
 });
-
-
+const url = window.location.href;
 let charts = {};
 
 async function loadDashboardData() {
     try {
         const [expRes, catRes] = await Promise.all([
-            fetch("http://localhost:3000/expenses/"),
-            fetch("http://localhost:3000/categories/"),
+            fetch(url + "expenses/"),
+            fetch(url + "categories/"),
         ]);
 
         const [expenses, categories] = await Promise.all([
@@ -23,43 +22,57 @@ async function loadDashboardData() {
             categoryMap[cat.category_id] = cat.name;
         });
 
+        // Daily Expenses - Today Only
+        const today = new Date();
+        const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-
-        // 1. Daily Expenses
-        const dailyTotals = {};
+        const todayTotals = {};
 
         expenses.forEach(exp => {
-            const rawDate = new Date(exp.date);
-            console.log(exp);
-            const formattedDate = `${rawDate.getFullYear()}-${String(rawDate.getMonth() + 1).padStart(2, '0')}-${String(rawDate.getDate()).padStart(2, '0')} ${String(exp.time.split(":")[0])}:${String(exp.time.split(":")[1])}:${String(exp.time.split(":")[2])}`;
+            const expDate = new Date(exp.date);
+            const expKey = `${expDate.getFullYear()}-${String(expDate.getMonth() + 1).padStart(2, '0')}-${String(expDate.getDate()).padStart(2, '0')}`;
 
-            console.log("👉 Raw:", rawDate, "| 📅 Formatted:", formattedDate);
-
-            dailyTotals[formattedDate] = (dailyTotals[formattedDate] || 0) + parseFloat(exp.amount);
+            if (expKey === todayKey) {
+                const formattedTime = exp.time ? `${exp.time.split(":")[0]}:${exp.time.split(":")[1]}:${exp.time.split(":")[2]}` : "Unknown";
+                todayTotals[formattedTime] = (todayTotals[formattedTime] || 0) + parseFloat(exp.amount);
+            }
         });
 
-
         renderChart("dailyChart", "line", {
-            labels: Object.keys(dailyTotals),
-            data: Object.values(dailyTotals),
-            label: "Daily Spending",
+            labels: Object.keys(todayTotals),
+            data: Object.values(todayTotals),
+            label: "Today's Spending",
             borderColor: "#3498db",
             backgroundColors: ["#3498db"]
         });
+        // Last 7 Days Spending
+        const last7DaysTotals = {};
 
-        // 2. Top 5 Expenses
-        const sortedExpenses = [...expenses].sort((a, b) => b.amount - a.amount).slice(0, 5);
-        const topLabels = sortedExpenses.map(e => `${e.subcategory || "Unknown"} - ₹${e.amount}`);
-        const topData = sortedExpenses.map(e => e.amount);
+        // Generate last 7 dates in reverse (oldest to newest)
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+            last7DaysTotals[key] = 0;
+        }
 
-        renderChart("topExpensesChart", "bar", {
-            labels: topLabels,
-            data: topData,
-            label: "Top 5 Expenses",
-            backgroundColors: "#e67e22"
+        expenses.forEach(exp => {
+            const date = new Date(exp.date);
+            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+            if (formattedDate in last7DaysTotals) {
+                last7DaysTotals[formattedDate] += parseFloat(exp.amount);
+            }
         });
 
-        // 3. Category-wise Totals
+        renderChart("last7DaysChart", "bar", {
+            labels: Object.keys(last7DaysTotals),
+            data: Object.values(last7DaysTotals),
+            label: "Last 7 Days Spending",
+            borderColor: "#8e44ad",
+            backgroundColors: "#8e44ad"
+        });
+
+        //  Category-wise Totals
         const categoryTotals = {};
         const categoryColors = {};
         categories.forEach(cat => {
@@ -77,19 +90,35 @@ async function loadDashboardData() {
             label: "Expenses by Category",
             backgroundColors: Object.keys(categoryTotals).map(cat => categoryColors[cat] || "#ccc")
         });
-        // 4. Payment Mode Usage
-        const paymentModeTotals = {};
+
+
+
+        // Monthly Spending - Last 12 Months
+        const monthlyTotals = {};
+
+        // Aggregate totals by YYYY-MM
         expenses.forEach(exp => {
-            const mode = exp.payment_mode || "Other";
-            paymentModeTotals[mode] = (paymentModeTotals[mode] || 0) + parseFloat(exp.amount);
+            const date = new Date(exp.date);
+            const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+            monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + parseFloat(exp.amount);
         });
 
-        renderChart("paymentChart", "pie", {
-            labels: Object.keys(paymentModeTotals),
-            data: Object.values(paymentModeTotals),
-            label: "Payment Mode Usage",
-            backgroundColors: ["#f39c12", "#e74c3c", "#2ecc71", "#9b59b6", "#1abc9c"]
+        // Sort the keys (months) chronologically
+        const sortedMonths = Object.keys(monthlyTotals).sort((a, b) => new Date(a) - new Date(b));
+
+        // Take only the last 12 months
+        const last12Months = sortedMonths.slice(-12);
+
+        // Extract data for those months
+        const last12Data = last12Months.map(month => monthlyTotals[month]);
+
+        renderChart("monthlyChart", "bar", {
+            labels: last12Months,
+            data: last12Data,
+            label: "Monthly Spending (Last 12 Months)",
+            backgroundColors: "#1abc9c"
         });
+
 
 
 
@@ -134,11 +163,24 @@ function renderChart(id, type, { labels, data, label, backgroundColors, borderCo
                 legend: {
                     position: type === "bar" || type === "line" ? "top" : "bottom",
                     labels: {
-                        color: isDarkMode ? "#fff" : "#111" // High contrast for light mode
+                        color: isDarkMode ? "#fff" : "#111"
                     }
                 },
                 title: {
                     display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            let label = context.dataset.label || "";
+                            let value = context.parsed.y !== undefined ? context.parsed.y : context.parsed;
+
+                            return `${label}: ₹${value.toLocaleString("en-IN", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })}`;
+                        }
+                    }
                 }
             },
             scales: type === "bar" || type === "line" ? {

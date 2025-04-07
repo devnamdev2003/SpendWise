@@ -4,7 +4,20 @@ const db = require('./db');
 
 // GET all categories
 router.get('/', (req, res) => {
-  db.query('SELECT * FROM categories', (err, results) => {
+  db.query(`SELECT 
+    c.category_id,
+    c.name,
+    c.icon,
+    c.color,
+    COUNT(e.expense_id) AS expense_count
+FROM 
+    categories c
+LEFT JOIN 
+    expenses e ON c.category_id = e.category_id
+GROUP BY 
+    c.category_id, c.name, c.icon, c.color
+ORDER BY 
+    expense_count DESC, c.name;`, (err, results) => {
     if (err) return res.status(500).json({ error: err });
     res.json(results);
   });
