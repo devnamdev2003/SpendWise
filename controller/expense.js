@@ -20,9 +20,11 @@ router.get('/', (req, res) => {
 router.get('/search', (req, res) => {
   const { from, to } = req.query;
   const sql = `
-    SELECT * FROM expenses
+    SELECT e.*, c.name AS category_name, c.icon, c.color
+    FROM expenses e
+    LEFT JOIN categories c ON e.category_id = c.category_id
     WHERE date BETWEEN ? AND ?
-    ORDER BY date DESC
+    ORDER BY e.date DESC, e.time DESC
   `;
 
   db.query(sql, [from, to], (err, results) => {

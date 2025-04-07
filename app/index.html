@@ -12,9 +12,11 @@
   <script src="./js/homeSection.js" defer></script>
   <script src="./js/addSection.js" defer></script>
   <script src="./js/searchSection.js" defer></script>
+  <script src="./js/calenderSection.js" defer></script>
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/color.css">
   <link rel="stylesheet" href="./css/addExpense.css">
+  <link rel="stylesheet" href="./css/calenderSection.css">
 </head>
 
 <body class="transition-colors duration-300">
@@ -303,14 +305,14 @@
         <div class="overflow-x-auto bg-surface rounded shadow">
           <table class="min-w-full table-auto">
             <thead>
-              <tr class=" bg-accent text-white uppercase text-xs">
+              <tr class="bg-accent text-white uppercase text-xs">
                 <th class="text-left px-4 py-3">Amount</th>
                 <th class="text-left px-4 py-3">Category</th>
                 <th class="text-left px-4 py-3">Subcategory</th>
                 <th class="text-left px-4 py-3">Date</th>
                 <th class="text-left px-4 py-3">Payment Mode</th>
                 <th class="text-left px-4 py-3">Location</th>
-                
+
               </tr>
             </thead>
             <tbody id="searchResultsTableBody" class="text-color-text bg-color-surface dark:bg-color-surface">
@@ -321,10 +323,53 @@
 
       </section>
 
-      <!-- Calendar Section -->
+      <!-- 📅 Calendar Section -->
       <section id="calendar" class="section hidden">
-        <h1 class="text-xl font-bold mb-4">Calendar</h1>
-        <p>Calendar view here...</p>
+        <h1 class="text-2xl font-bold mb-6 text-accent">📅 Calendar View</h1>
+        <div class="text-center text-red-600 font-semibold mb-2" id="monthTotal">Total Expenses: ₹0</div>
+
+
+        <div class="rounded shadow">
+          <!-- Day headers -->
+          <h2 id="calendarTitle" class="border-b border-white p-2 bg-accent text-white text-lg font-semibold text-center"></h2>
+          <div class="grid grid-cols-7 text-center font-semibold shadow bg-accent text-white uppercase text-xs">
+            <div class="border-r border-white p-2">Sun</div>
+            <div class="border-r border-white p-2">Mon</div>
+            <div class="border-r border-white p-2">Tue</div>
+            <div class="border-r border-white p-2">Wed</div>
+            <div class="border-r border-white p-2">Thu</div>
+            <div class="border-r border-white p-2">Fri</div>
+            <div class="p-2">Sat</div>
+          </div>
+          
+          
+
+          <!-- Calendar grid -->
+          <div id="calendarGrid" class="grid grid-cols-7 gap-2 mt-2 text-center text-sm"></div>
+
+          <!-- Calendar navigation -->
+          <div class="flex justify-center items-center mb-4">
+            <button onclick="changeMonth(-1)" class="bg-accent text-white px-4 py-2 rounded mr-2 transition">&lt;
+              Previous
+              Month</button>
+            <button onclick="changeMonth(1)" class="bg-accent text-white px-4 py-2 rounded ml-2 transition">Next Month
+              &gt;</button>
+          </div>
+        </div>
+
+        <!-- Modal -->
+        <div id="dayModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+          <div class="bg-surface2 p-6 rounded-xl w-11/12 md:w-1/2 max-h-[60vh] flex flex-col shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-bold text-color" id="modalTitle">Expenses</h2>
+              <button onclick="closeModal()" class="text-red-500 font-bold text-xl hover:text-red-700">&times;</button>
+            </div>
+
+            <ul id="modalExpenseList"
+              class="space-y-3 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-500 dark:scrollbar-track-gray-800"
+              style="max-height: 60vh;"></ul>
+          </div>
+        </div>
       </section>
 
       <!-- Settings Section -->

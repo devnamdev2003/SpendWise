@@ -38,7 +38,7 @@ async function loadDashboardData() {
             }
         });
 
-        renderChart("dailyChart", "line", {
+        renderChart("dailyChart", "bar", {
             labels: Object.keys(todayTotals),
             data: Object.values(todayTotals),
             label: "Today's Spending",

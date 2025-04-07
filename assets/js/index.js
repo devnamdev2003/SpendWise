@@ -30,7 +30,11 @@ const showSection = (id) => {
   else if (id === "add") {
     addFormReset();
     loadCategory();
-
+  }
+  else if (id === "calendar") {
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    renderCalendar(currentYear, currentMonth);
   }
   // On mobile, close the sidebar after selection
   const sidebar = document.getElementById("sidebar");
