@@ -1,12 +1,7 @@
-import { addFormReset, loadCategory } from './addSection.js';
-import { loadDashboardData } from './homeSection.js';
-import { renderCalendar } from './calenderSection.js';
-import { listSection } from './listSection.js';
-
 document.addEventListener("DOMContentLoaded", () => {
 
   const toggle = document.getElementById("modeToggle");
-  loadDashboardData();
+
   // Initialize toggle based on theme
   toggle.checked = document.documentElement.classList.contains("dark");
 
@@ -17,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-window.showSection = (id) => {
+const showSection = (id) => {
   // Hide all sections
   document.querySelectorAll(".section").forEach((section) => {
     section.classList.add("hidden");
@@ -50,7 +45,7 @@ window.showSection = (id) => {
   }
 };
 
-window.toggleSidebar = () => {
+const toggleSidebar = () => {
   const sidebar = document.getElementById("sidebar");
   const isHidden = sidebar.classList.contains("hidden");
 
@@ -61,7 +56,7 @@ window.toggleSidebar = () => {
   }
 };
 
-window.showToast = (message, type = 'success') => {
+function showToast(message, type = 'success') {
   const toastContainer = document.getElementById('toast-container');
 
   const toast = document.createElement('div');

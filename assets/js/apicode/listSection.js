@@ -1,12 +1,14 @@
-import { ExpenseService } from './localStorage/expenseLocal.js';
-import { CategoryService } from './localStorage/categoryLocal.js';
-
 let expenses = [];
 
-function listSection() {
+async function listSection() {
     try {
-        expenses = ExpenseService.getAll();
-        const categories = CategoryService.getAll();
+        const [expRes, catRes] = await Promise.all([
+            fetch(url + "expenses/"),
+            fetch(url + "categories/"),
+        ]);
+
+        expenses = await expRes.json();
+        const categories = await catRes.json();
 
         // Map category_id to category name for easy lookup
         const categoryMap = Object.fromEntries(
@@ -31,8 +33,14 @@ function listSection() {
         <td class="px-4 py-3 whitespace-nowrap">${expDateTime}</td>
         <td class="px-4 py-3 whitespace-nowrap">${expense.payment_mode}</td>
         <td class="px-4 py-3 whitespace-nowrap">
+          <!--  <button 
+            onclick="openEditModal(${expense.expense_id})"
+            class="text-accent hover:underline flex items-center gap-1"
+          >
+            ✏️ <span>Edit</span>
+          </button> -->
           <button 
-            onclick="confirmDelete('${expense.expense_id}')"
+            onclick="confirmDelete(${expense.expense_id})"
             class="text-red-500 hover:underline flex items-center gap-1"
           >
             🗑️ <span>Delete</span>
@@ -50,7 +58,7 @@ function listSection() {
 
 let sortDirections = {};
 
-window.sortTable = (colIndex) => {
+function sortTable(colIndex) {
     const table = document.getElementById("expenseTable");
     const tbody = document.getElementById("expenseTableBody");
     const rows = Array.from(tbody.rows);
@@ -90,18 +98,48 @@ window.sortTable = (colIndex) => {
     sorted.forEach(row => tbody.appendChild(row));
 }
 
-window.confirmDelete = (id) => {
+// Edit modal functions
+function openEditModal(index) {
+    const exp = expenses[index];
+    document.getElementById("editIndex").value = index;
+    document.getElementById("editAmount").value = exp.amount;
+    document.getElementById("editSubcategory").value = exp.subcategory;
+    document.getElementById("editMode").value = exp.payment_mode;
+    document.getElementById("expenseModal").classList.remove("hidden");
+}
+
+function closeModal() {
+    document.getElementById("expenseModal").classList.add("hidden");
+}
+
+function saveEdit(event) {
+    event.preventDefault();
+    const index = document.getElementById("editIndex").value;
+    expenses[index].amount = document.getElementById("editAmount").value;
+    expenses[index].subcategory = document.getElementById("editSubcategory").value;
+    expenses[index].payment_mode = document.getElementById("editMode").value;
+    closeModal();
+    listSection(); // refresh
+}
+
+function confirmDelete(id) {
     if (confirm("Are you sure you want to delete this expense?")) {
-        const result = ExpenseService.remove(id);
-
-        if (result.error) {
-            console.error("Error:", result.error);
-            showToast(result.error || 'Something went wrong while deleting the expense.', 'error');
-        } else {
-            showToast(result.message || "Expense deleted successfully", 'success');
-            listSection(); // Refresh the expense list
-        }
+        fetch(`${url}expenses/${id}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to delete expense");
+                }
+                return response.json();
+            })
+            .then(data => {
+                showToast(data.message || "Expense deleted successfully", 'success');
+                listSection();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showToast(error || 'Something went wrong while deleting the expense.', 'error');
+            });
     }
-};
-
-export { listSection };
+}

@@ -1,17 +1,17 @@
-import { ExpenseService } from './localStorage/expenseLocal.js';
-import { CategoryService } from './localStorage/categoryLocal.js';
-
-
-document.getElementById('searchForm').addEventListener('submit', function (e) {
+document.getElementById('searchForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const from = document.getElementById('fromDate').value;
     const to = document.getElementById('toDate').value;
 
     try {
+        const [res, catRes] = await Promise.all([
+            fetch(`${url}expenses/search?from=${from}&to=${to}`),
+            fetch(`${url}categories/`)
+        ]);
 
-        const expenses = ExpenseService.search(from, to);
-        const categories = CategoryService.getAll();
+        const expenses = await res.json();
+        const categories = await catRes.json();
 
         const categoryMap = Object.fromEntries(categories.map(c => [c.category_id, c.name]));
 

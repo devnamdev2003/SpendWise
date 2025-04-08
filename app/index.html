@@ -7,16 +7,19 @@
   <title>Expense Tracker Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="./js/index.js" defer></script>
-  <script src="./js/listSection.js" defer></script>
-  <script src="./js/homeSection.js" defer></script>
-  <script src="./js/addSection.js" defer></script>
-  <script src="./js/searchSection.js" defer></script>
-  <script src="./js/calenderSection.js" defer></script>
-  <link rel="stylesheet" href="./css/index.css">
-  <link rel="stylesheet" href="./css/color.css">
-  <link rel="stylesheet" href="./css/addExpense.css">
-  <link rel="stylesheet" href="./css/calenderSection.css">
+  <script type="module" src="../assets/js/localStorage/categoryLocal.js" defer></script>
+  <script type="module" src="../assets/js/localStorage/expenseLocal.js" defer></script>
+  <script type="module" src="../assets/js/localStorage/storage.js" defer></script>
+  <script type="module" src="../assets/js/index.js" defer></script>
+  <script type="module" src="../assets/js/listSection.js" defer></script>
+  <script type="module" src="../assets/js/homeSection.js" defer></script>
+  <script type="module" src="../assets/js/addSection.js" defer></script>
+  <script type="module" src="../assets/js/searchSection.js" defer></script>
+  <script type="module" src="../assets/js/calenderSection.js" defer></script>
+  <link rel="stylesheet" href="../assets/css/index.css">
+  <link rel="stylesheet" href="../assets/css/color.css">
+  <link rel="stylesheet" href="../assets/css/addExpense.css">
+  <link rel="stylesheet" href="../assets/css/calenderSection.css">
 </head>
 
 <body class="transition-colors duration-300">
@@ -245,39 +248,6 @@
           </table>
         </div>
 
-        <!-- Modal -->
-        <div id="expenseModal"
-          class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div class="bg-surface p-6 rounded shadow-md w-full max-w-md border border-gray-300 dark:border-gray-700">
-            <h2 class="text-xl font-bold mb-4 text-accent">
-              ✏️ Edit Expense
-            </h2>
-            <form id="editForm" onsubmit="saveEdit(event)">
-              <input type="hidden" id="editIndex" />
-              <div class="mb-4">
-                <label class="block mb-1 font-medium">Amount</label>
-                <input type="number" id="editAmount" class="w-full  p-2 rounded border" required />
-              </div>
-              <div class="mb-4">
-                <label class="block mb-1 font-medium">Subcategory</label>
-                <input type="text" id="editSubcategory" class="w-full  p-2 rounded border" />
-              </div>
-              <div class="mb-4">
-                <label class="block mb-1 font-medium">Payment Mode</label>
-                <input type="text" id="editMode" class="w-full  p-2 rounded border" />
-              </div>
-              <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeModal()"
-                  class="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700 text-black dark:text-white">
-                  Cancel
-                </button>
-                <button type="submit" class="px-4 py-2 rounded bg-accent text-white hover:bg-opacity-90">
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
       </section>
 
       <!-- 🔍 Search Section -->
@@ -331,7 +301,8 @@
 
         <div class="rounded shadow">
           <!-- Day headers -->
-          <h2 id="calendarTitle" class="border-b border-white p-2 bg-accent text-white text-lg font-semibold text-center"></h2>
+          <h2 id="calendarTitle"
+            class="border-b border-white p-2 bg-accent text-white text-lg font-semibold text-center"></h2>
           <div class="grid grid-cols-7 text-center font-semibold shadow bg-accent text-white uppercase text-xs">
             <div class="border-r border-white p-2">Sun</div>
             <div class="border-r border-white p-2">Mon</div>
@@ -341,14 +312,14 @@
             <div class="border-r border-white p-2">Fri</div>
             <div class="p-2">Sat</div>
           </div>
-          
-          
+
+
 
           <!-- Calendar grid -->
           <div id="calendarGrid" class="grid grid-cols-7 gap-2 mt-2 text-center text-sm"></div>
 
           <!-- Calendar navigation -->
-          <div class="flex justify-center items-center mb-4">
+          <div class="flex justify-center items-center m-5">
             <button onclick="changeMonth(-1)" class="bg-accent text-white px-4 py-2 rounded mr-2 transition">&lt;
               Previous
               Month</button>

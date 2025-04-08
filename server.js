@@ -16,6 +16,9 @@ app.use((req, res, next) => {
 const expenseRoutes = require('./controller/expense');
 const categoryRoutes = require('./controller/category');
 
+// const expenseRoutes = require('./controller/expenseLocal');
+// const categoryRoutes = require('./controller/categoryLocal');
+
 // Use routes
 app.use('/expenses', expenseRoutes);
 app.use('/categories', categoryRoutes);

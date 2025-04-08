@@ -1,12 +1,12 @@
-import { ExpenseService } from './localStorage/expenseLocal.js';
 
 let currentYear = new Date().getFullYear();
 let currentMonth = new Date().getMonth();
 
-function calculateTotalExpenses(fromDate, toDate) {
+async function calculateTotalExpenses(fromDate, toDate) {
     const monthTotal = document.getElementById('monthTotal');
     try {
-        const data = ExpenseService.search(fromDate, toDate)
+        const res = await fetch(`${url}expenses/search?from=${fromDate}&to=${toDate}`);
+        const data = await res.json();
 
         let total = 0;
         if (Array.isArray(data)) {
@@ -78,7 +78,9 @@ function renderCalendar(year, month) {
     }
 }
 
-window.changeMonth = (offset) => {
+
+
+function changeMonth(offset) {
     currentMonth += offset;
     if (currentMonth < 0) {
         currentMonth = 11;
@@ -90,16 +92,18 @@ window.changeMonth = (offset) => {
     renderCalendar(currentYear, currentMonth);
 }
 
-window.closeModal = () => {
+function closeModal() {
     const modal = document.getElementById('dayModal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     document.getElementById('modalExpenseList').innerHTML = '';
 }
 
-function openModal(dateStr) {
+
+async function openModal(dateStr) {
     try {
-        const expenses = ExpenseService.search(dateStr, dateStr)
+        const res = await fetch(`${url}expenses/search?from=${dateStr}&to=${dateStr}`);
+        const expenses = await res.json();
 
         const modal = document.getElementById('dayModal');
         const modalTitle = document.getElementById('modalTitle');
@@ -140,4 +144,5 @@ function openModal(dateStr) {
     }
 }
 
-export { renderCalendar };
+
+

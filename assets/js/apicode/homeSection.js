@@ -1,13 +1,21 @@
-import { ExpenseService } from './localStorage/expenseLocal.js';
-import { CategoryService } from './localStorage/categoryLocal.js';
-
+document.addEventListener("DOMContentLoaded", () => {
+    loadDashboardData();
+});
+const url = window.location.href;
 let charts = {};
 
-function loadDashboardData() {
+async function loadDashboardData() {
     try {
-        const expenses = ExpenseService.getAll();
-        const categories = CategoryService.getAll();
-        console.log(expenses, categories);
+        const [expRes, catRes] = await Promise.all([
+            fetch(url + "expenses/"),
+            fetch(url + "categories/"),
+        ]);
+
+        const [expenses, categories] = await Promise.all([
+            expRes.json(),
+            catRes.json(),
+        ]);
+
         const categoryMap = {};
         categories.forEach((cat) => {
             categoryMap[cat.category_id] = cat.name;
@@ -190,5 +198,3 @@ function renderChart(id, type, { labels, data, label, backgroundColors, borderCo
         }
     });
 }
-
-export { loadDashboardData };

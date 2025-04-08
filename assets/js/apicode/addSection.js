@@ -1,10 +1,8 @@
-import { ExpenseService } from './localStorage/expenseLocal.js';
-import { CategoryService } from './localStorage/categoryLocal.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('expenseForm');
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         // Clear previous errors
@@ -39,24 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         if (!isValid) return;
-        // api use
+
         try {
-            const newExpense = ExpenseService.add({
-                amount: data.amount,
-                category_id: data.category_id,
-                subcategory: data.subcategory,
-                date: data.date,
-                time: data.time,
-                note: data.note,
-                payment_mode: data.payment_mode,
-                location: data.location,
+            const res = await fetch(url + 'expenses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
             });
 
+            const result = await res.json();
 
-            if (!newExpense) {
+            if (!res.ok) {
                 showToast(result.error || 'Failed to add expense', 'error');
                 return;
             }
+
             showToast('Expense added successfully!', 'success');
             form.reset();
             addFormReset();
@@ -68,16 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function loadCategory() {
+
+
+async function loadCategory() {
     const dropdownBtn = document.getElementById("custom-category");
     const dropdownList = document.getElementById("category-list");
     const selectedSpan = document.getElementById("selected-category");
 
     // Clear previous list items to prevent duplicates
     dropdownList.innerHTML = '';
-    // api use
+
     try {
-        const categories = CategoryService.getAll();
+        const res = await fetch(url + 'categories');
+        const categories = await res.json();
 
         categories.forEach(cat => {
             const li = document.createElement("li");
@@ -124,6 +122,8 @@ function loadCategory() {
     }
 }
 
+
+
 function addFormReset() {
     const timeInput = document.getElementById("expenseTime");
     const now = new Date();
@@ -146,5 +146,3 @@ function addFormReset() {
         hiddenInput.value = "";
     }
 }
-
-export { addFormReset, loadCategory };
